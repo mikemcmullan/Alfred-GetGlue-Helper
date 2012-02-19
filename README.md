@@ -4,7 +4,7 @@
 
 *Note: you can find the single extension file on the downloads page. <https://github.com/MikeMcMullan/Alfred-GetGlue-Helper/downloads>* 
 
-An [alfred app](http://alfredapp.com/) extension to quickly launch a GetGlue search in your default web browser. You will also need the [Powerpack](http://alfredapp.com/powerpack/) to use this. By default this extension uses the keyword 'getglue'. The search syntax is as follows.
+An [Alfred App](http://alfredapp.com/) extension to quickly launch a GetGlue search in your default web browser. You will also need the [Powerpack](http://alfredapp.com/powerpack/) to use this. By default this extension uses the keyword 'getglue'. The search syntax is as follows.
 
 	getglue search terms
 
