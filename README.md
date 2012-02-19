@@ -2,6 +2,8 @@
 
 **Version: 1.0.1**
 
+*Note: you can find the single extension file on the downloads page. <https://github.com/MikeMcMullan/Alfred-GetGlue-Helper/downloads>* 
+
 An alfred extension to quickly launch a search on GetGlue in your default web browser. By default the extension uses the keyword 'getglue'. The search syntax is as follows.
 
 	getglue search terms
