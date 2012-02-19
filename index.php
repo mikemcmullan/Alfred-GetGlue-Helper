@@ -23,8 +23,8 @@
 		
 		$alias = md5($query);
 		
-		if(file_exists("aliases/{$alias}"))
-		{
+		if(file_exists("aliases/{$alias}")):
+		
 			// Get the data and unserialize it.
 			$get_alias = file_get_contents("aliases/{$alias}");
 			$alias_data = unserialize($get_alias);
@@ -34,12 +34,12 @@
 				$url = $alias_data['data'];
 			else
 				$url = "http://getglue.com/search?q=" . urlencode($alias_data['data']);
-		}
-		else
-		{
-			$url = "http://getglue.com/search?q=" . urlencode($query);
-		}
+				
+		else:
 		
+			$url = "http://getglue.com/search?q=" . urlencode($query);
+			
+		endif;
 		
 		`open {$url}`;
 		
@@ -52,21 +52,23 @@
 	$params = explode(' ', $params);
 	
 	// Remove empty value from array.
-	foreach($params as $key => $param)
-	{
+	foreach($params as $key => $param):
+	
 		if($param == '')
 			unset($params[$key]);
-	}
+			
+	endforeach;
 		
 	// If the command is alias	
 	if($command === "alias"):
 		
 		$key = trim($params[0]);
-		$value = trim($params[1]);
+		array_shift($params);		
+		$value = implode(' ', $params);
 		
 		// If both variables are valid write the alias file.
-		if($key && $value)
-		{
+		if($key && $value):
+		
 			$filename = md5($key);
 			$contents = serialize(array('data' => $value, 'alias' => $key));
 			
@@ -74,11 +76,12 @@
 			
 			echo "Alias Create: {$key}\n";
 			echo "{$value}";
-		}
-		else
-		{
+		
+		else:
+		
 			echo "Error: Missing Name Or Value";
-		}
+		
+		endif;
 			
 		die();
 			
