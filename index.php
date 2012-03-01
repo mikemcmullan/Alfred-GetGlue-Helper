@@ -23,10 +23,12 @@
 		
 		$alias = md5($query);
 		
-		if(file_exists("aliases/{$alias}")):
+		$search = glob("aliases/{$alias}*");
+		
+		if(!empty($search)):
 		
 			// Get the data and unserialize it.
-			$get_alias = file_get_contents("aliases/{$alias}");
+			$get_alias = file_get_contents($search[0]);
 			$alias_data = unserialize($get_alias);
 						
 			// If is real url then set as url else set as search query
@@ -72,7 +74,7 @@
 			$filename = md5($key);
 			$contents = serialize(array('data' => $value, 'alias' => $key));
 			
-			file_put_contents("aliases/{$filename}", $contents);
+			file_put_contents("aliases/{$filename}.txt", $contents);
 			
 			echo "Alias Create: {$key}\n";
 			echo "{$value}";

@@ -1,6 +1,6 @@
 ## Alfred GetGlue Helper
 
-**Version: 1.0.1**
+**Version: 1.0.2**
 
 *Note: you can find the single extension file on the downloads page. <https://github.com/MikeMcMullan/Alfred-GetGlue-Helper/downloads>* 
 
