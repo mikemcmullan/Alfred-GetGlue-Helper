@@ -1,6 +1,6 @@
 ## Alfred GetGlue Helper
 
-**Version: 1.0.2**
+**Version: 1.0.3**
 
 *Note: you can find the single extension file on the downloads page. <https://github.com/MikeMcMullan/Alfred-GetGlue-Helper/downloads>* 
 
@@ -10,13 +10,12 @@ An [Alfred App](http://alfredapp.com/) extension to quickly launch a GetGlue sea
 
 As well as search the user can also define aliases to launch directly into a shows, movies, etc GetGlue page. The syntax to create an alias is as follows.
 
-	getglue alias name url/term
+	getglue alias name url
 
 	Example:
 	getglue alias fringe http://getglue.com/tv_shows/fringe
-	getglue alias bluebloods Blue Bloods
 
-The alias name may only contain alphanumeric characters, dashes and underscores, the url/term may only contain valid url or search terms. To access the alias simply type in the alias name as a search query. 
+The alias name may only contain alphanumeric characters, dashes underscores and spaces. The url must be a valid up including the http://. To access the alias simply type in the alias name as a search query. 
 
 	getglue alias_name
 

@@ -6,7 +6,7 @@
 		getglue sg1
 		getglue alias sg1 http://getglue.com/tv_shows/stargate_sg_1
 	*/
-	
+
 	$query = trim(stripcslashes($argv[1]));
 	
 	$commands = array('alias');
@@ -44,6 +44,7 @@
 		endif;
 		
 		`open {$url}`;
+		//echo "Opening $url" . PHP_EOL;
 		
 		die();
 
@@ -63,10 +64,10 @@
 		
 	// If the command is alias	
 	if($command === "alias"):
-		
-		$key = trim($params[0]);
-		array_shift($params);		
-		$value = implode(' ', $params);
+
+        $value = end($params);
+        array_pop($params);
+        $key = implode(' ', $params);
 		
 		// If both variables are valid write the alias file.
 		if($key && $value):
