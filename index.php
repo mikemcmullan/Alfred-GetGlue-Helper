@@ -9,7 +9,7 @@
 
 	$query = trim(stripcslashes($argv[1]));
 	
-	$commands = array('alias');
+	$commands = array('alias', 'a', 'generate', 'g');
 	
 	// Get the command from arguments
 	$command = explode(' ', $query);
@@ -63,8 +63,8 @@
 	endforeach;
 		
 	// If the command is alias	
-	if($command === "alias"):
-
+	if($command === "alias" || $command === 'a'):
+	
         $value = end($params);
         array_pop($params);
         $key = implode(' ', $params);
@@ -87,5 +87,35 @@
 		endif;
 			
 		die();
+		
+	elseif($command === 'generate' || $command === 'g'):
 			
+		$files = glob("aliases/*");
+		$template = file_get_contents('template.html');
+		
+		$map = function($file)
+		{
+			$content = ($content = file_get_contents($file)) ? unserialize($content) : false;
+			
+			if($content)
+			{
+				return "<tr><td>{$content['alias']}</td><td>{$content['data']}</td><td>{$file}</td></tr>";
+			}
+		};
+		
+		$aliases = array_map($map, $files);
+		
+		$search = array("/{{title}}/", "/{{content}}/");
+		$replace = array('GetGlue Stored Aliases', implode('', $aliases));
+		
+		$template = preg_replace($search, $replace, $template);
+		
+		$file_name = 'generated_getglue_aliases_' . time() . '.html';
+		
+		file_put_contents('/tmp/' . $file_name, $template);
+		
+		$url = '/tmp/' . $file_name;
+		
+		`open {$url}`;
+		
 	endif;
