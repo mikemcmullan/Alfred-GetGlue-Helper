@@ -51,18 +51,15 @@
 	endif;
 	
 	// Format the parameters correctly.
-	$params = trim(preg_replace("/{$command}/", '', $query));
-	$params = explode(' ', $params);
+	$params = explode(' ', $query);
+
+    // Remove command from array
+	array_shift($params);
 	
-	// Remove empty value from array.
-	foreach($params as $key => $param):
-	
-		if($param == '')
-			unset($params[$key]);
-			
-	endforeach;
-		
-	// If the command is alias	
+	// Remove empty values from array.
+	$params = array_filter($params);
+    
+	// If the command is alias or a for short create an alias.
 	if($command === "alias" || $command === 'a'):
 	
         $value = end($params);
@@ -87,31 +84,43 @@
 		endif;
 			
 		die();
-		
+    
+    // If command is generate or g for short create an html page with all created aliases.
 	elseif($command === 'generate' || $command === 'g'):
-			
+        
+        // Find all the alias files.
 		$files = glob("aliases/*");
+		
 		$template = file_get_contents('template.html');
 		
+		// Get the contents of the passed file and unserialize is and format the html output.
 		$map = function($file)
 		{
 			$content = ($content = file_get_contents($file)) ? unserialize($content) : false;
 			
 			if($content)
 			{
-				return "<tr><td>{$content['alias']}</td><td>{$content['data']}</td><td>{$file}</td></tr>";
+				return sprintf(
+				'<tr>
+				    <td class="alias"><strong>%1$s</strong</td>
+				    <td><a href="%2$s" target="_blank">%2$s</a></td>
+				    <td>%3$s</td>
+				</tr>
+				', $content['alias'], $content['data'], $file);
 			}
 		};
 		
 		$aliases = array_map($map, $files);
-		
+				
+		// Replace all template tags with corresponding content
 		$search = array("/{{title}}/", "/{{content}}/");
 		$replace = array('GetGlue Stored Aliases', implode('', $aliases));
 		
 		$template = preg_replace($search, $replace, $template);
 		
-		$file_name = 'generated_getglue_aliases_' . time() . '.html';
+		$file_name = 'getglue_aliases.html';
 		
+		// Put the newly created template into an html file.
 		file_put_contents('/tmp/' . $file_name, $template);
 		
 		$url = '/tmp/' . $file_name;
