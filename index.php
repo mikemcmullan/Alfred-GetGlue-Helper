@@ -5,6 +5,7 @@
         
         getglue sg1
         getglue alias sg1 http://getglue.com/tv_shows/stargate_sg_1
+        getglue generate
     */
     
     // Turn off error reporting.
@@ -47,7 +48,16 @@
             // Get the data and unserialize it.
             $get_alias = file_get_contents($files[0]);
             $alias_data = unserialize($get_alias);
-                        
+            
+            // Add a visit to the number of visits.
+            if(isset($alias_data['number_of_visits']))
+                $alias_data['number_of_visits'] += 1;
+            else
+                $alias_data['number_of_visits'] = 1;
+            
+            // Write the new data to the original file.
+            file_put_contents($files[0], serialize($alias_data));
+
             // If is real url then set as url else set as search query
             if(filter_var($alias_data['data'], FILTER_VALIDATE_URL))
                 $url = $alias_data['data'];
@@ -56,15 +66,12 @@
                 
         else:
         
-            $url = "http://getglue.com/search?q=" . urlencode($query);
+            $url = "http://getglue.com/search?q=" . urlencode($query_string);
             
         endif;
         
-        `open {$url}`;
-        //echo "Opening $url" . PHP_EOL;
-        
-        die();
-    
+        open($url);
+            
     // If the command is alias or a for short create an alias.
     elseif($command === 'alias' || $command === 'a'):
     
@@ -108,9 +115,10 @@
                 '<tr>
                     <td class="alias"><strong>%1$s</strong</td>
                     <td><a href="%2$s" target="_blank">%2$s</a></td>
-                    <td><a href="%3$s" target="_blank">%4$s</a></td>
+                    <td>%3$d</td>
+                    <td><a href="%4$s" target="_blank">%5$s</a></td>
                 </tr>
-                ', $content['alias'], $content['data'], dirname(__FILE__) . '/' . $file, $file);
+                ', $content['alias'], $content['data'], $content['number_of_visits'], dirname(__FILE__) . '/' . $file, $file);
             }
         };
         
@@ -129,6 +137,16 @@
         
         $url = $file;
         
-        `open {$url}`;
+        open($url);
         
     endif;
+    
+    function open($url)
+    {
+        global $debug;
+        
+        if($debug === true)
+            echo $url;
+        else
+            `open {$url}`;
+    }
