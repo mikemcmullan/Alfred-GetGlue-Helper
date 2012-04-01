@@ -9,6 +9,10 @@
     
     // Turn off error reporting.
     error_reporting(0);
+    
+    // If debug is true url will be echo'd instead of opened.
+    $debug = false;
+    
     // Get the query from the command line.
     $query_string = trim(stripcslashes($argv[1]));
     
