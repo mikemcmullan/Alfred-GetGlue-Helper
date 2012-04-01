@@ -7,6 +7,8 @@
         getglue alias sg1 http://getglue.com/tv_shows/stargate_sg_1
     */
     
+    // Turn off error reporting.
+    error_reporting(0);
     // Get the query from the command line.
     $query_string = trim(stripcslashes($argv[1]));
     
