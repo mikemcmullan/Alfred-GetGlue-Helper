@@ -21,7 +21,6 @@
     $query = array_filter(explode(' ', $query_string));
     
     // All available commands
-    $commands = array('search', 's', 'alias', 'a', 'generate', 'g');
     $commands = array('search', 's', 'alias', 'a', 'generate', 'g', 'checkin', 'c');
     
     // Check if the command is in the commands array. If not set the command to be search.
@@ -84,7 +83,7 @@
         if($key && $value):
         
             $filename = md5($key);
-            $contents = serialize(array('data' => $value, 'alias' => $key));
+            $contents = serialize(array('data' => $value, 'alias' => $key, 'number_of_visits' => 0));
             
             file_put_contents("aliases/{$filename}.txt", $contents);
             
@@ -105,28 +104,28 @@
         
         $template = file_get_contents('template.html');
         
-        // Get the contents of the passed file and unserialize is and format the html output.
-        $map = function($file)
+        // Find the table row content from inside the template.
+        preg_match('/\{{content}}(.*){{\/content}}/s', $template, $row_template);
+        $row_template = $row_template[1];
+        
+        // Get the contents of the file and unserialize it and format the html output.
+        $map = function($file) use($row_template)
         {
             $content = ($content = file_get_contents($file)) ? unserialize($content) : false;
             
             if($content)
             {
-                return sprintf(
-                '<tr>
-                    <td class="alias"><strong>%1$s</strong</td>
-                    <td><a href="%2$s" target="_blank">%2$s</a></td>
-                    <td>%3$d</td>
-                    <td><a href="%4$s" target="_blank">%5$s</a></td>
-                </tr>
-                ', $content['alias'], $content['data'], $content['number_of_visits'], dirname(__FILE__) . '/' . $file, $file);
+                $search = array('/{{alias}}/', '/{{data}}/', '/{{number_of_visits}}/', '/{{alias_file_url}}/', '/{{alias_file_name}}/');
+                $replace = array($content['alias'], $content['data'], (int) $content['number_of_visits'], dirname(__FILE__) . '/' . $file, $file);
+                
+                return preg_replace($search, $replace, $row_template);
             }
         };
         
         $aliases = array_map($map, $files);
-                
+                        
         // Replace all template tags with corresponding content
-        $search = array("/{{title}}/", "/{{content}}/");
+        $search = array('/{{title}}/', '/\{{content}}(.*){{\/content}}/s');
         $replace = array('GetGlue Stored Aliases', implode('', $aliases));
         
         $template = preg_replace($search, $replace, $template);
@@ -139,6 +138,7 @@
         $url = $file;
         
         open($url);
+    
     // Will integrate with Glue Terminal to allow checkins from alfed.
     elseif($command === 'checkin' || $command === 'c'):
     
