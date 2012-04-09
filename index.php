@@ -22,6 +22,7 @@
     
     // All available commands
     $commands = array('search', 's', 'alias', 'a', 'generate', 'g');
+    $commands = array('search', 's', 'alias', 'a', 'generate', 'g', 'checkin', 'c');
     
     // Check if the command is in the commands array. If not set the command to be search.
     // Also remove the command from the query.
@@ -138,6 +139,45 @@
         $url = $file;
         
         open($url);
+    // Will integrate with Glue Terminal to allow checkins from alfed.
+    elseif($command === 'checkin' || $command === 'c'):
+    
+        // The alias name and comment are separate by a dash. Find the dash and save the
+        // array position.
+        if($sep_position = array_search('-', $query)):
+            
+            // Separate the alias name and the comment. We will use the stored position of
+            // the dash to know where the comment begins. Anything before the dash will
+            // be assumed as the alias name. Then reassenble back into a string.
+            $alias = implode(' ', array_slice($query, 0, $sep_position));
+            $comment = implode(' ', array_slice($query, $sep_position+1));
+            
+        else:
+        
+            // Since there is no comment just reassemble the query back into a string as
+            // the alias name.
+            $alias = implode(' ', $query);
+        
+        endif;
+        
+        $alias_filename = md5($alias);
+        
+        // Find the alias file.
+        $files = glob("aliases/{$alias_filename}*");
+        
+        // If the file is found then proceed with checkin, else error out.
+        if(!empty($files)):
+        
+            $get_alias = file_get_contents($files[0]);
+            $alias_data = unserialize($get_alias);
+            
+            print_r($alias_data);
+        
+        else:
+        
+            echo 'Could not find alias by that name.';
+        
+        endif;
         
     endif;
     
