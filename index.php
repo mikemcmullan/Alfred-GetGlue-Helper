@@ -12,7 +12,9 @@
     error_reporting(0);
     
     // If debug is true url will be echo'd instead of opened.
-    $debug = false;
+    $debug = true;
+
+    $getglue_terminal_location = '/Volumes/TB Drive/htdocs/glue-terminal/getglue';
     
     // Get the query from the command line.
     $query_string = trim(stripcslashes($argv[1]));
@@ -125,8 +127,8 @@
         $aliases = array_map($map, $files);
                         
         // Replace all template tags with corresponding content
-        $search = array('/{{title}}/', '/\{{content}}(.*){{\/content}}/s');
-        $replace = array('GetGlue Stored Aliases', implode('', $aliases));
+        $search = array('/{{title}}/', '/\{{content}}(.*){{\/content}}/s', '/{{num_aliases}}/');
+        $replace = array('GetGlue Stored Aliases', implode('', $aliases), count($aliases));
         
         $template = preg_replace($search, $replace, $template);
         
@@ -170,8 +172,26 @@
         
             $get_alias = file_get_contents($files[0]);
             $alias_data = unserialize($get_alias);
+
+            // Add a visit to the number of visits.
+            if(isset($alias_data['number_of_visits']))
+                $alias_data['number_of_visits'] += 1;
+            else
+                $alias_data['number_of_visits'] = 1;
             
-            print_r($alias_data);
+            // Write the new data to the original file.
+            file_put_contents($files[0], serialize($alias_data));
+            
+            $getglue_data = array(
+                'objectId' => $alias_data['data'],
+                'comment' => (isset($comment) && trim($comment) != '') ? $comment : ''
+            );
+                                    
+            $getglue_data = base64_encode(serialize($getglue_data));
+            
+            $getglue_path = escapeshellarg($getglue_terminal_location);
+            
+            echo shell_exec("php {$getglue_path} checkin-direct {$getglue_data}");
         
         else:
         

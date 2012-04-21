@@ -20,7 +20,9 @@
         a:active    { color: #333; }
         
         body        { font-size: 13px; color: #323232; background: #fcfcfc; }
-        table       { width: 950px; margin: 30px auto; border: 1px #eaeaea solid; -webkit-box-shadow: 0 0 4px #f1f1f1; -moz-box-shadow: 0 0 4px #f1f1f1; box-shadow: 0 0 4px #f1f1f1; }
+        .wrapper    { width: 950px; margin: 30px auto; }
+        .info       { padding-bottom: 10px; text-align: right; }
+        table       { width: 100%; border: 1px #eaeaea solid; -webkit-box-shadow: 0 0 4px #f1f1f1; -moz-box-shadow: 0 0 4px #f1f1f1; box-shadow: 0 0 4px #f1f1f1; }
         table tr th { text-align: left; padding: 10px 0 10px 10px; border-bottom: 1px #d5d5d5 solid; font-size: 14px; }
         table tr td { padding: 10px 0 10px 10px; border-bottom: 1px #eaeaea solid; }
         table tr:nth-child(even) { background: #f8f8f8; }
@@ -29,25 +31,30 @@
     
 </head>
 <body>
-    <table>
-        <thead>
-            <tr>
-                <th>Alais</th>
-                <th>Data</th>
-                <th>Visits</th>
-                <th>File</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{content}}
-            <tr>
-                <td class="alias"><strong>{{alias}}</strong</td>
-                <td><a href="{{data}}" target="_blank">{{data}}</a></td>
-                <td>{{number_of_visits}}</td>
-                <td><a href="{{alias_file_url}}" target="_blank">{{alias_file_name}}</a></td>
-            </tr>
-            {{/content}}
-        </tbody>
-    </table>
+    <div class="wrapper">
+        <div class="info">
+            You currently have <strong>{{num_aliases}}</strong> aliases.
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alais</th>
+                    <th>Data</th>
+                    <th>Visits</th>
+                    <th>File</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{content}}
+                <tr>
+                    <td class="alias"><strong>{{alias}}</strong</td>
+                    <td><a href="{{data}}" target="_blank">{{data}}</a></td>
+                    <td>{{number_of_visits}}</td>
+                    <td><a href="{{alias_file_url}}" target="_blank">{{alias_file_name}}</a></td>
+                </tr>
+                {{/content}}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
