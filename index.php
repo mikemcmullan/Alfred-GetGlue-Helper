@@ -12,7 +12,7 @@
     error_reporting(0);
     
     // If debug is true url will be echo'd instead of opened.
-    $debug = true;
+    $debug = false;
 
     // The absolute location of the getglue terminal app. Not yet available.
     $getglue_terminal_location = '/Volumes/TB Drive/htdocs/glue-terminal/getglue';
