@@ -189,10 +189,8 @@
             );
                                     
             $getglue_data = base64_encode(serialize($getglue_data));
-            
-            $getglue_path = escapeshellarg($getglue_terminal_location);
-            
-            echo shell_exec("php {$getglue_path} checkin-direct {$getglue_data}");
+                        
+            echo shell_exec("php {$getglue_terminal_location} checkin-direct {$getglue_data}");
         
         else:
         
