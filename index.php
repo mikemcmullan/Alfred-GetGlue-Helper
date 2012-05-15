@@ -16,6 +16,7 @@
 
     // The absolute location of the getglue terminal app. Not yet available.
     $getglue_terminal_location = '~/getglue';
+    $getglue_terminal_location = '/usr/local/bin/getglue';
     
     // Get the query from the command line.
     $query_string = trim(stripcslashes($argv[1]));
