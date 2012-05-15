@@ -15,7 +15,6 @@
     $debug = false;
 
     // The absolute location of the getglue terminal app. Not yet available.
-    $getglue_terminal_location = '~/getglue';
     $getglue_terminal_location = '/usr/local/bin/getglue';
     
     // Get the query from the command line.
@@ -189,9 +188,6 @@
                 'comment' => (isset($comment) && trim($comment) != '') ? $comment : ''
             );
                                     
-            $getglue_data = base64_encode(serialize($getglue_data));
-                        
-            echo shell_exec("php {$getglue_terminal_location} checkin-direct {$getglue_data}");
             $getglue_data = base64_encode(json_encode($getglue_data));
 
             echo shell_exec("{$getglue_terminal_location} checkin-direct {$getglue_data}");
