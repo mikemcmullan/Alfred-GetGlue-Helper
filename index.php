@@ -191,6 +191,9 @@
             $getglue_data = base64_encode(serialize($getglue_data));
                         
             echo shell_exec("php {$getglue_terminal_location} checkin-direct {$getglue_data}");
+            $getglue_data = base64_encode(json_encode($getglue_data));
+
+            echo shell_exec("{$getglue_terminal_location} checkin-direct {$getglue_data}");
         
         else:
         
