@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>action</key>
-	<false/>
+	<true/>
 	<key>category</key>
 	<string>SCRIPTS</string>
 	<key>command</key>
-	<string>php -f index.php "{query}"</string>
+	<string>ruby ruby/getglue.rb "{query}"</string>
 	<key>disabled</key>
 	<false/>
 	<key>escapequery</key>
-	<true/>
+	<false/>
 	<key>escapequerybackquotes</key>
-	<true/>
+	<false/>
 	<key>escapequerybrackets</key>
-	<true/>
+	<false/>
 	<key>escapequeryquotes</key>
-	<true/>
+	<false/>
 	<key>escapequerysemicolons</key>
-	<true/>
+	<false/>
 	<key>growloutput</key>
 	<true/>
 	<key>growloutputsticky</key>
@@ -27,7 +27,7 @@
 	<key>keyword</key>
 	<string>getglue</string>
 	<key>logging</key>
-	<false/>
+	<true/>
 	<key>parameter</key>
 	<integer>3</integer>
 	<key>silent</key>
