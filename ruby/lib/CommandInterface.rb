@@ -15,7 +15,7 @@ class CommandInterface
     end
 
     def analyze
-        @query = @query.split(' ')
+        @query = @query.split ' '
         @@command = @@comands.include?(@query[0]) ? @query.shift : 's'
         @@args = @query
 
@@ -36,22 +36,22 @@ class CommandInterface
     end
 
     def cmd_search
-        alias_name  = @@args.join(' ')
-        info        = Aliases.alias(alias_name)
+        alias_name  = @@args.join ' '
+        info        = Aliases.alias alias_name
 
-        Aliases.update(alias_name) if info
+        Aliases.update alias_name if info
 
         if info
-            open(info['data'])
+            open info['data']
         else
-            open(URI::encode(@@searchUrl + @@args.join(' ')))
+            open URI::encode @@searchUrl + @@args.join(' ')
         end
     end
 
     def cmd_alias
         return puts "Missing alias name or url." if @@args.length < 2
         url         = @@args.pop
-        alias_value = @@args.join(' ')
+        alias_value = @@args.join ' '
         return puts 'Missing valid url for alias.' unless url =~ URI::regexp
 
         new_alias = Aliases.new({ 
@@ -70,33 +70,33 @@ class CommandInterface
         aliases     = Aliases.aliases
         title       = 'GetGlue Stored Aliases'
 
-        template    = File.read(File.join(APP_ROOT, 'template.erb'));
-        erb_result  = ERB.new(template).result(binding)
-        file_path   = File.join(`echo $TMPDIR`.chomp, 'getglue_aliases.html')
+        template    = File.read File.join APP_ROOT, 'template.erb';
+        erb_result  = ERB.new(template).result binding
+        file_path   = File.join `echo $TMPDIR`.chomp, 'getglue_aliases.html'
 
-        File.open(file_path , 'w') do |file|
+        File.open file_path , 'w' do |file|
             file.puts erb_result
         end
 
-        open(file_path)
+        open file_path
     end
 
     def cmd_checkin
         if sep_index = @@args.index('-')
-            alias_name  = @@args[0, sep_index].join(' ')
-            comment     = @@args[sep_index+1, @@args.length].join(' ')
+            alias_name  = @@args[0, sep_index].join ' '
+            comment     = @@args[sep_index+1, @@args.length].join ' '
         else
-            alias_name  = @@args.join(' ')
+            alias_name  = @@args.join ' '
             comment     = ''
         end
 
-        info = Aliases.alias(alias_name)
+        info = Aliases.alias alias_name
 
         if info
-            Aliases.update(alias_name)
+            Aliases.update alias_name unless @@debug
 
             getglue_data = { :objectId => info['data'], :comment =>  comment }
-            encoded_data = Base64.encode64(PHP.serialize(getglue_data)).gsub("\n", '')
+            encoded_data = Base64.encode64(PHP.serialize getglue_data).gsub "\n", ''
 
             puts "Would have checked into #{info['alias']}" if @@debug
             puts `#{@@getglue} checkin-direct #{encoded_data}` unless @@debug
