@@ -188,13 +188,13 @@
                 'comment' => (isset($comment) && trim($comment) != '') ? $comment : ''
             );
                                     
-            $getglue_data = base64_encode(json_encode($getglue_data));
+            $getglue_data = base64_encode(serialize($getglue_data));
 
             echo shell_exec("{$getglue_terminal_location} checkin-direct {$getglue_data}");
         
         else:
         
-            echo 'Could not find alias by that name.';
+            echo "Could not find the alias '{$alias}'.";
         
         endif;
         
